@@ -1,6 +1,6 @@
 pkgname=libxml2
-pkgver=2.14.5
-pkgrel=1
+pkgver=2.15.0
+pkgrel=2
 pkgdesc="XML C parser and toolkit"
 arch=('x86_64')
 url="https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home"
@@ -16,7 +16,7 @@ depends=(
 makedepends=('python')
 source=(https://download.gnome.org/sources/libxml2/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz
     https://www.w3.org/XML/Test/xmlts20130923.tar.gz)
-sha256sums=(03d006f3537616833c16c53addcdc32a0eb20e55443cba4038307e3fa7d8d44b
+sha256sums=(5abc766497c5b1d6d99231f662e30c99402a90d03b06c67b62d6c1179dedd561
     9b61db9f5dbffa545f4b8d78422167083a8568c59bd1129f94138f936cf6fc1f)
 
 build() {
