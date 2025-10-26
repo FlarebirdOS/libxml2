@@ -1,6 +1,6 @@
 pkgname=libxml2
 pkgver=2.15.0
-pkgrel=2
+pkgrel=3
 pkgdesc="XML C parser and toolkit"
 arch=('x86_64')
 url="https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home"
@@ -13,7 +13,12 @@ depends=(
     'zlib'
     'xz'
 )
-makedepends=('python')
+makedepends=(
+    'docbook-xsl'
+    'doxygen'
+    'meson'
+    'python'
+)
 source=(https://download.gnome.org/sources/libxml2/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz
     https://www.w3.org/XML/Test/xmlts20130923.tar.gz)
 sha256sums=(5abc766497c5b1d6d99231f662e30c99402a90d03b06c67b62d6c1179dedd561
@@ -22,19 +27,15 @@ sha256sums=(5abc766497c5b1d6d99231f662e30c99402a90d03b06c67b62d6c1179dedd561
 build() {
     cd ${pkgname}-${pkgver}
 
-    local configure_args=(
-        --sysconfdir=/etc
-        --disable-static
-        --with-history
-        --with-icu
-        PYTHON=/usr/bin/python3
-        --docdir=/usr/share/doc/${pkgname}-${pkgver}
-        ${configure_options}
+    local meson_args=(
+        -D icu=enabled
+        -D legacy=enabled
+        -D python=enabled
     )
 
-    ./configure "${configure_args[@]}"
+    ${meson_options} "${meson_args[@]}"
 
-    make
+    ${meson_build}
 
     ln -sv ${srcdir}/xmlconf .
 }
@@ -42,7 +43,7 @@ build() {
 package() {
     cd ${pkgname}-${pkgver}
 
-    make DESTDIR=${pkgdir} install
+    ${meson_install} ${pkgdir}
 
     sed '/libs=/s/xml2.*/xml2"/' -i ${pkgdir}/usr/bin/xml2-config
 }
